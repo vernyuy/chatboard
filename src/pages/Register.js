@@ -53,7 +53,7 @@ function Register(){
 
     useEffect(()=>{
         if(!isConfirmed){
-            // navigate("/confirm-signup", {state:{username: username}})
+            navigate("/confirm-signup", {state:{username: username}})
         }
     }, [navigate, dispatch, isConfirmed])
 

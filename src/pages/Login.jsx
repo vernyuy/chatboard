@@ -13,7 +13,7 @@ function Login(){
 
     useEffect(()=>{
         if(isSuccess || user){
-            navigate('/home')
+            navigate('/people')
         }
         if(message === "User is not confirmed."){
             navigate('/confirm-signup', {state:{username:email}})
@@ -40,6 +40,12 @@ function Login(){
         }))
       }
 
+      const loginGoogle = (e) => {
+        console.log("Google login")
+        const test = Auth.federatedSignIn()
+        console.log(test)
+      }
+
     return(
         <>
             <div className="grid sm:grid-cols-2 w-screen mx-auto h-screen">
@@ -47,7 +53,7 @@ function Login(){
                 <div>
                     <p className="text-red-800">{message}</p>
                     <form onSubmit={(e)=>handleSubmit(e)}>
-                        <label for="input-group-1" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Email</label>
+                        <label for="input-group-1" className="block mb-2 text-sm font-medium text-grsday-900 dark:text-black">Your Email</label>
                         <div className="flex">
                         <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-blue-300 rounded-l-md dark:bg-blue-600 dark:text-gray-400 dark:border-blue-600">
                             <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="#fff" viewBox="0 0 20 20">
@@ -98,7 +104,7 @@ function Login(){
 
                 <div className="xs:flex justify-between">
                 <div className="mt-12 col-span- h-fit w-fit mx-auto">
-                    <button type="button" className="text-black w-full shadow-xl hover:bg-[#4285F4]/90 bg-gray-200 focus:ring-4 focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#4285F4]/55 mr-2 mb-2">
+                    <button type="button" onClick={loginGoogle} className="text-black w-full shadow-md hover:bg-[#4285F4]/90 bg-gray-200 focus:ring-4 focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#4285F4]/55 mr-2 mb-2">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         xmlnsXlink="http://www.w3.org/1999/xlink"

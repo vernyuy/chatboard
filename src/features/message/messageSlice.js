@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 // import authService from './authService';
-import sendMessage from './messageService'
+// import sendMessage from './messageService'
+import messageService from './messageService';
 
 // const user  = JSON.parse(localStorage.getItem('msg'));
 
@@ -10,10 +11,10 @@ const initialState = {
   isError:false
 };
 
-// Signup
-export const sendMessage = createAsyncThunk('message/send', async(msg, thunkApi)=>{
+// send message
+export const sendMessage = createAsyncThunk('message/sendMessage', async(msg, thunkApi)=>{
   try{
-    return await authService.sendMessage(msg)
+    return await messageService.sendMessage(msg)
   }catch(err){
     const message = (err.response && err.response.data && err.response.data.message) || err.message || err.toString()
     console.log(err)
@@ -22,12 +23,8 @@ export const sendMessage = createAsyncThunk('message/send', async(msg, thunkApi)
 }) 
 
 export const messageSlice = createSlice({
-    name: 'msg',
-    initialState:{
-        isSending: false,
-        isSent: false,
-        isError:false
-      },
+    name: 'message',
+    initialState,
     reducers: {
       reset: (state)=> {
         state.isSending = false
@@ -40,21 +37,21 @@ export const messageSlice = createSlice({
       .addCase(sendMessage.pending, (state)=>{
         state.isSent = false
         state.isSending = true
-        isError = false
+        state.isError = false
       })
       .addCase(sendMessage.fulfilled, (state, action)=>{
         state.isSent = true
         state.isSending = false
-        isError = false
+        state.isError = false
       })
       .addCase(sendMessage.rejected, (state, action)=>{
         state.isSent = false
         state.isSending = false
-        isError = false
+        state.isError = false
       })
   }
 })
 
-export const selectMessage = (state)=> state.msg
+export const selectMessage = (state)=> state.message
 
 export default messageSlice.reducer

@@ -9,13 +9,17 @@ import { NavLink, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logOut } from '../features/auth/userSlice';
+import { DataStore } from 'aws-amplify';
 function ChatSidebar (){
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState(false);
   const {user, isLogout} = useSelector(state=>state.user)
-  const logout = ()=>{
+  const logout = async()=>{
+    console.log("logging out")
+    const test = await DataStore.clear();
+    console.log('Data cleared',test)
     dispatch(logOut())
   }
 
@@ -23,35 +27,37 @@ function ChatSidebar (){
     if(isLogout){
       navigate('/')
     } 
-  },[])
+  },[user])
 
   return (
     <>
     
-      <Sidebar backgroundColor='rgba(12,123,213,0.0)' width='12%' collapsedWidth='5%' breakPoint='sm'
-        collapsed={collapsed} className='h-screen bg-black'>
-            <div className='bg-blue-600 h-32'></div>
-        <Menu className=' pt-5'>
-            <MenuItem icon={<GroupIcon/>} component={<Link to="/groups" />} className='tsext-black hover:bg-blue-700'>
+      <div className='rounded-xl overflow-hidden m-2  bg-white'>
+      <Sidebar backgroundColor='#fff' width='100%' collapsedWidth='40%' breakPoint='sm'
+        collapsed={collapsed} className='h-3/4'>
+            {/* <div className='bg-blue-600 h-32'></div> */}
+        <Menu className=' py-10'>
+            <MenuItem icon={<GroupIcon/>} style={{ padding:0}}  component={<Link to="/groups" />} className='text-black text-[14px] hover:bg-blue-700'>
                 Groups
             </MenuItem>
-            <MenuItem icon={<AddPerson/>} component={<Link to="/people" className='tesxt-black'/>}>
+            <MenuItem icon={<AddPerson/>} style={{ padding:0}}  component={<Link to="/people" className='text-black'/>}>
               People
             </MenuItem>
 
-          <MenuItem icon={<InboxIcon/>} component={<Link to="/home" className='text-sblack'/>}> 
+          {/* <MenuItem icon={<InboxIcon/>} style={{ padding:0}}  component={<Link to="/home" className='text-black'/>}> 
             Inbox
           </MenuItem>
-          <MenuItem icon={<HelpIcon/>} className='tesxt-black'> 
+          <MenuItem icon={<HelpIcon/>} style={{ padding:0}} className='text-black'> 
             Help
-          </MenuItem>
+          </MenuItem> */}
 
-          <MenuItem icon={<HelpIcon/>} onClick={logout} className='texsst-black'> 
+          <MenuItem icon={<HelpIcon/>} style={{ padding:0}}  onClick={logout} className='text-black'> 
             LogOut
           </MenuItem>
           <MenuItem className='text-black'> Examples</MenuItem>
         </Menu>
       </Sidebar>
+      </div>
       <main style={{ padding: 10 }} className=' absolute l-[10px] z-10'>
         <div>
           {

@@ -1,15 +1,17 @@
 
 import { Auth } from "aws-amplify";
 import { DataStore } from 'aws-amplify';
-import { User, Message } from "../../models";
+import { User, Message, MessageType, MessageStatus } from "../../models";
 
 const sendMessage = async (msg)=>{
     try{
         const test = await DataStore.save(
             new Message({
+                messageType: MessageType.TEXT,
+                messageStatus: MessageStatus.SENT,
                 message: msg.content,
-                user: msg.sender,
-                message: msg.receiver,
+                messageUserId: msg.sender,
+                messageMessageToId: msg.receiver, 
             })
         )
         console.log(test)
@@ -20,7 +22,7 @@ const sendMessage = async (msg)=>{
     }
 }
 
-const authService = {
+const messageService = {
     sendMessage,
 }
 

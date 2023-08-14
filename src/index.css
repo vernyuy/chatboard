@@ -16,9 +16,16 @@ code {
     monospace;
 }
 
+div::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 20px;
+  display: none;
+}
+
 ::-webkit-scrollbar {
   width: 5px;
   border-radius: 20px;
+  /* display: none; */
 }
 
 /* Track */

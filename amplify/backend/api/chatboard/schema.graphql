@@ -26,18 +26,19 @@ type Message @model @auth(rules: [{allow: public}]) {
   messageTo: User @hasOne
 }
 
-type User @model {
+type User @model @auth(rules: [{allow: public}]) {
   id: ID!
   username: String!
   email: String
+  cognitoId: String!
   profileImageUrl: String
   rooms: [chatRooms] @hasMany
   chatroomss: [chatRooms] @manyToMany(relationName: "chatRoomsUser")
   createdAt: AWSTimestamp
   userStatus: UserStatus
-}
+} 
 
-type chatRooms @model {
+type chatRooms @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
   createdBy: User @belongsTo

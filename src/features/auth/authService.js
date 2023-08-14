@@ -3,39 +3,53 @@ import { Auth } from "aws-amplify";
 // import {User} from '../../models'
 import { createSlice } from "@reduxjs/toolkit";
 import { DataStore } from 'aws-amplify';
-import { User } from "../../models";
+import { User, UserStatus } from "../../models";
 
 const signup = async (user)=>{
     try{
         console.log("signing up")
-        //  await Auth.signUp({
-        //     username: user.username,
-        //     password: user.password,
-        //     attributes:{
-        //         email: user.mail
-        //     },
-        //     autoSignIn:{
-        //         enabled: true
-        //     },
-        //     autoVerify:{
-        //         enabled:true
-        //     },
-        //     autoConfirmSignUp:{
-        //         enabled:true
-        //     }
-        // })
-        const test = await DataStore.save(
+         const test1 = await Auth.signUp({
+            username: user.username,
+            password: user.password,
+            attributes:{
+                email: user.mail
+            },
+            autoSignIn:{
+                enabled: true
+            },
+            autoVerify:{
+                enabled:true
+            },
+            autoConfirmSignUp:{
+                enabled:true
+            }
+        }).then(data=>{
+          const test = DataStore.save(
             new User({
-                username: "test",
-                id: 'sodhsf',
-                email:"test",
+                username: user.username,
+                email:user.email,
+                cognitoId: data.userSub,
                 profileImageUrf:"test",
                 // createdAt: AWS,
                 // updatedAt: Date.now.toString(),
-                userStatus: 'ACTIVE'
+                userStatus: UserStatus.ACTIVE
             })
         )
         console.log(test)
+        })
+        console.log(test1)
+        // const test = await DataStore.save(
+        //     new User({
+        //         username: user.username,
+        //         email:user.email,
+        //         cognitoId: test1.userSub,
+        //         profileImageUrf:"test",
+        //         // createdAt: AWS,
+        //         // updatedAt: Date.now.toString(),
+        //         userStatus: UserStatus.ACTIVE
+        //     })
+        // )
+        // console.log(test)
         //     ))
     }catch(error){
         console.log(error)
@@ -46,7 +60,8 @@ const signup = async (user)=>{
 const signin = async (user)=>{
     try {
         const userInfo = await Auth.signIn(user.email, user.password);
-        console.log(userInfo)
+        console.log(">>>>>>>>>>>>>>>>",userInfo)
+        localStorage.setItem('user', JSON.stringify(userInfo))
         // navigate('/home')
         return userInfo
       } catch (error) {
