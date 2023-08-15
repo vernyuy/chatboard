@@ -1,20 +1,18 @@
 
 import { Auth } from "aws-amplify";
 import { DataStore } from 'aws-amplify';
-import { User, Message, MessageType, MessageStatus } from "../../models";
+import { User, Message, MessageType } from "../../models";
 
 const sendMessage = async (msg)=>{
     try{
+        const sender = await DataStore.query(User, msg.sender)
         const test = await DataStore.save(
             new Message({
                 messageType: MessageType.TEXT,
-                messageStatus: MessageStatus.SENT,
                 message: msg.content,
-                messageUserId: msg.sender,
-                messageTo: msg.receiver, 
-                messageMessageToId: msg.receiver, 
-                createdOn: Date(Date.now()),
-
+                user: sender,
+                receiver: msg.receiver, 
+                created_at: Date.now()
             })
         )
         console.log(test)

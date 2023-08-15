@@ -72,18 +72,18 @@ function Register(){
     
 
     async function onChange(e) {
-      const file = e.target.files[0];
+      // const file = e.target.files[0];
       try {
-        await Storage.put(file.name, file, {
-          contentType: "image/png", // contentType is optional
-        }).then(data=>{
+        // await Storage.put(file.name, file, {
+        //   contentType: "image/png", // contentType is optional
+        // }).then(data=>{
           dispatch(signup({
             username: username,
             password: pwd,
             email: email,
-            key: data.key
+            // key: data.key
           }))
-        })
+        // })
       } catch (error) {
         console.log("Error uploading file: ", error);
       }

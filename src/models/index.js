@@ -8,26 +8,24 @@ const UserStatus = {
   "ACTIVE": "ACTIVE"
 };
 
-const MessageStatus = {
-  "SENT": "SENT",
-  "RECEIVED": "RECEIVED"
-};
-
 const MessageType = {
   "TEXT": "TEXT",
-  "VIDEO": "VIDEO",
-  "AUDIO": "AUDIO"
+  "IMAGE": "IMAGE"
 };
 
-const { Message, User, chatRooms, MessagechatRooms, ChatRoomsUser } = initSchema(schema);
+const Receiver = {
+  "GROUP": "GROUP",
+  "USER": "USER"
+};
+
+const { Message, User, ChatRoom, GroupMember } = initSchema(schema);
 
 export {
   Message,
   User,
-  chatRooms,
-  MessagechatRooms,
-  ChatRoomsUser,
+  ChatRoom,
+  GroupMember,
   UserStatus,
-  MessageStatus,
-  MessageType
+  MessageType,
+  Receiver
 };
