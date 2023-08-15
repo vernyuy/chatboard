@@ -7,16 +7,20 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "auth": {
-    "chatboard128b621e": {
+    "chatboard224d0989": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
-      "HostedUIDomain": "string",
       "IdentityPoolId": "string",
       "IdentityPoolName": "string",
-      "OAuthMetadata": "string",
       "UserPoolArn": "string",
       "UserPoolId": "string",
       "UserPoolName": "string"
+    }
+  },
+  "storage": {
+    "chatboard": {
+      "BucketName": "string",
+      "Region": "string"
     }
   }
 }

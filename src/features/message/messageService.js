@@ -11,7 +11,10 @@ const sendMessage = async (msg)=>{
                 messageStatus: MessageStatus.SENT,
                 message: msg.content,
                 messageUserId: msg.sender,
+                messageTo: msg.receiver, 
                 messageMessageToId: msg.receiver, 
+                createdOn: Date(Date.now()),
+
             })
         )
         console.log(test)

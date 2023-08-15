@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "chatboard128b621e_identitypool_128b621e",
-    "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "chatbo128b621e",
-    "userPoolName": "chatboard128b621e_userpool_128b621e",
+    "identityPoolName": "chatboard224d0989_identitypool_224d0989",
+    "allowUnauthenticatedIdentities": true,
+    "resourceNameTruncated": "chatbo224d0989",
+    "userPoolName": "chatboard224d0989_userpool_224d0989",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -31,15 +31,12 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "chatbo128b621e_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "chatbo224d0989_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "128b621e",
-    "resourceName": "chatboard128b621e",
+    "sharedId": "224d0989",
+    "resourceName": "chatboard224d0989",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "defaultSocial",
-    "usernameAttributes": [
-      "email"
-    ],
+    "useDefault": "default",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
@@ -57,12 +54,6 @@
       ]
     },
     "breakCircularDependency": true,
-    "dependsOn": [],
-    "hostedUI": true,
-    "hostedUIDomainName": "chatboardb4cac9b6-b4cac9b6",
-    "authProvidersUserPool": [],
-    "hostedUIProviderMeta": "[]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/groups/\"],\"LogoutURLs\":[\"htpp://localhost:3000/\"]}",
-    "authProviders": []
+    "dependsOn": []
   }
 }

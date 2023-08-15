@@ -4,26 +4,24 @@ enum UserStatus {
   ACTIVE
 }
 
-enum MessageStatus {
-  SENT
-  RECEIVED
-}
 
 enum MessageType {
   TEXT
-  VIDEO
-  AUDIO
+  IMAGE
+}
+
+enum Receiver{
+  GROUP
+  USER
 }
 
 type Message @model @auth(rules: [{allow: public}]) {
   id: ID!
   message: String
-  createdOn: AWSTimestamp
+  created_at: AWSTimestamp
   messageType: MessageType
-  user: User @hasOne
-  chatRooms: [chatRooms] @manyToMany(relationName: "MessagechatRooms")
-  messageStatus: MessageStatus
-  messageTo: User @hasOne
+  user: User @belongsTo
+  receiver: String
 }
 
 type User @model @auth(rules: [{allow: public}]) {
@@ -32,17 +30,17 @@ type User @model @auth(rules: [{allow: public}]) {
   email: String
   cognitoId: String!
   profileImageUrl: String
-  rooms: [chatRooms] @hasMany
-  chatroomss: [chatRooms] @manyToMany(relationName: "chatRoomsUser")
+  room: [ChatRoom] @hasMany
+  ChatRoom: [ChatRoom] @manyToMany(relationName: "GroupMember")
   createdAt: AWSTimestamp
   userStatus: UserStatus
+  message: [Message] @hasMany
 } 
 
-type chatRooms @model @auth(rules: [{allow: public}]) {
+type ChatRoom @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
-  createdBy: User @belongsTo
+  User: User @belongsTo
   createAt: String
-  members: [User] @manyToMany(relationName: "chatRoomsUser")
-  messages: [Message] @manyToMany(relationName: "MessagechatRooms")
+  members: [User] @manyToMany(relationName: "GroupMember")
 }

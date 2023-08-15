@@ -9,30 +9,20 @@ const signup = async (user)=>{
     try{
         console.log("signing up")
          const test1 = await Auth.signUp({
-            username: user.username,
+          username: user.username,
             password: user.password,
+            email: user.mail,
             attributes:{
-                email: user.mail
+              email: user.email,
             },
-            autoSignIn:{
-                enabled: true
-            },
-            autoVerify:{
-                enabled:true
-            },
-            autoConfirmSignUp:{
-                enabled:true
-            }
         }).then(data=>{
           const test = DataStore.save(
             new User({
                 username: user.username,
                 email:user.email,
                 cognitoId: data.userSub,
-                profileImageUrf:"test",
-                // createdAt: AWS,
-                // updatedAt: Date.now.toString(),
-                userStatus: UserStatus.ACTIVE
+                profileImageUrl:user.key,
+                userStatus: UserStatus.ACTIVE,
             })
         )
         console.log(test)
@@ -59,19 +49,10 @@ const signup = async (user)=>{
 
 const signin = async (user)=>{
     try {
-        const userInfo = await Auth.signIn(user.email, user.password);
-        console.log(">>>>>>>>>>>>>>>>",userInfo)
-        localStorage.setItem('user', JSON.stringify(userInfo))
-        // navigate('/home')
-        return userInfo
+      const data = await Auth.signIn(user.email, user.password)
+        localStorage.setItem('user',JSON.stringify(data))
+          return data
       } catch (error) {
-        // console.log(error.UserNotFoundException);
-        // const {code, message} = error
-        // if(){
-            // console.log(error.code)
-            // console.log(message)
-        // }
-        // if(err.m)
         throw error
       }
 }

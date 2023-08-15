@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import IncomingMessage from "./IncomingMessage"
 import MessageFormField from "./MessageFormField"
 import OutgoingMessage from "./OutgoingMessage"
@@ -10,13 +10,19 @@ function ChatsScreen(props){
     const user = localStorage.getItem('user')
     const userId = JSON.parse(user).attributes.sub
     console.log("mesage>>>>>>>>",JSON.parse(user).attributes.sub)
+    const ref = useRef();
 
     useEffect(()=>{
-        // document.getElementById('msg').scrollTo(0, 400)
         fetchMessages()
         const subscription = DataStore.observe(Message).subscribe(()=> fetchMessages())
+      if (messages.length) {
+        ref.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+        });
+      } 
         return () => subscription.unsubscribe()
-    },[])
+    },[messages.length])
 
     async function fetchMessages(){
         DataStore.observeQuery(Message, Predicates.ALL, {
@@ -24,24 +30,17 @@ function ChatsScreen(props){
         }).subscribe(snapshot=>{
             const {items, isSynced} = snapshot
             console.log(`[Snapshot] item count: ${items}, isSynced: ${isSynced}`);
-
-            // .then((data)=>{
-            //     console.log(data)
+            // if(isSynced){
                 setMessages(items)
-            // })
+            // }
         })
     }
     
     return(
         <>
-        <div className="sm:grid sm:grid-cols-3 md:grid-cols-4 max-h-screen gap-3 bg-white h-full my-2 rounded-xl">
-                    {/* <div className=" w-full rounded-s-xl border-e-2">
-                        {/* <Person receiverId={'person.id'} name={'person.username'} email={'person.email'}/>
-                        <Person receiverId={'person.id'} name={'person.username'} email={'person.email'}/> /}
-                    </div> */}
+        <div className=" rounded-xl font-poppins">
 
-                    <div id="msg" className="w-full p-5 sm:col-span-3 md:col-span-4 overflow-y-scroll">
-                        {/* sdjflkdjgl */}
+                    <div id="msg" className="w-full p-5 sm:col-span-3 md:col-span-4 overflow-y-scroll bg-slate-200">
                         {
                             messages.map((msg=>{
                                 if(msg.messageUserId == props.senderId && msg.messageMessageToId == userId ){
@@ -52,22 +51,13 @@ function ChatsScreen(props){
                                 }
                             }))
                         }
-                        {/* <IncomingMessage message="Incoming message"/>
-                        <OutgoingMessage message="Incoming message"/>
-                        <IncomingMessage message="Incoming message"/>
-                        <OutgoingMessage message="Incoming message"/>
-                        <IncomingMessage message="Incoming message"/>
-                        <OutgoingMessage message="Incoming message"/>
-                        <IncomingMessage message="Incoming message"/>
-                        <OutgoingMessage message="Incoming message"/>
-                        <IncomingMessage message="Incoming message"/>
-                        <OutgoingMessage message="Incoming message"/> */}
-                        {/* {people.map(person=><Person receiverId={person.id} name={person.username} email={person.email}/>)} */}
-                        <div className="sticky w-full bottom-0">
+                    </div>
+                    
+                    <div className="sticky  bottom-0">
                             <MessageFormField receiverId={props.senderId}/>
                         </div>
-                    </div>
                </div>
+               <div ref={ref} />
         </>
     )
 }

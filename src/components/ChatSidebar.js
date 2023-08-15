@@ -10,16 +10,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logOut } from '../features/auth/userSlice';
 import { DataStore } from 'aws-amplify';
+import { BxsConversation } from './icons/BxsConversation';
+import { PhChatDots } from './icons/PhChatDots';
 function ChatSidebar (){
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState(false);
-  const {user, isLogout} = useSelector(state=>state.user)
+  const [isLogout, setIsLogout] = useState(false)
+  const {user} = useSelector(state=>state.user)
   const logout = async()=>{
+    localStorage.removeItem('user')
     console.log("logging out")
     const test = await DataStore.clear();
     console.log('Data cleared',test)
+    setIsLogout(true)
     dispatch(logOut())
   }
 
@@ -27,52 +32,53 @@ function ChatSidebar (){
     if(isLogout){
       navigate('/')
     } 
-  },[user])
+  },[user, isLogout])
 
   return (
     <>
     
-      <div className='rounded-xl overflow-hidden m-2  bg-white'>
-      <Sidebar backgroundColor='#fff' width='100%' collapsedWidth='40%' breakPoint='sm'
-        collapsed={collapsed} className='h-3/4'>
+      <div className='rounded-xl overflow-hidden m-4 h-5/6 pl-5 pt- bg-white text-black font-poppins'>
+      <main style={{ }} className='flex justify-end mt-1'>
+        <div>
+          {
+          collapsed?<svg xmlns="http://www.w3.org/2000/svg" onClick={() => setCollapsed(!collapsed)} className='hover:cursor-pointer' width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M8.59 16.59L13.17 12L8.59 7.41L10 6l6 6l-6 6l-1.41-1.41z"></path></svg>
+          
+          // <svg xmlns="http://www.w3.org/2000/svg" onClick={() => setCollapsed(!collapsed)} className='hover:cursor-pointer'width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6l6 6l1.41-1.41z"></path></svg>
+          :<svg xmlns="http://www.w3.org/2000/svg" onClick={() => setCollapsed(!collapsed)} className='hover:cursor-pointer'width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6l6 6l1.41-1.41z"></path></svg>
+        }
+        </div>
+      </main>
+      <Sidebar backgroundColor='#fff' width='100%' collapsedWidth='40%' breakPoint='sm' style={{borderRight:"none", }}
+        collapsed={collapsed} className='h-full'>
             {/* <div className='bg-blue-600 h-32'></div> */}
-        <Menu className=' py-10'>
-            <MenuItem icon={<GroupIcon/>} style={{ padding:0}}  component={<Link to="/groups" />} className='text-black text-[14px] hover:bg-blue-700'>
+        <Menu className=''>
+            <MenuItem icon={<GroupIcon/>} style={{ padding:0,}}  component={<Link to="/groups" />} className='text-black text-[14px]'>
                 Groups
             </MenuItem>
-            <MenuItem icon={<AddPerson/>} style={{ padding:0}}  component={<Link to="/people" className='text-black'/>}>
-              People
+            <MenuItem icon={<BxsConversation/>} style={{ padding:0}}  component={<Link to="/people" className='text-black'/>}>
+              Live chat
             </MenuItem>
 
-          {/* <MenuItem icon={<InboxIcon/>} style={{ padding:0}}  component={<Link to="/home" className='text-black'/>}> 
-            Inbox
-          </MenuItem>
-          <MenuItem icon={<HelpIcon/>} style={{ padding:0}} className='text-black'> 
-            Help
-          </MenuItem> */}
+            <div className='grid grid-cols-3 items-baseline gap-0 my-2 border-e-2 border-blue-700'>
+              <button className=' bg-blue-700 rounded-lg text-blue-700 p-1 max-w-[30px] text-center h-8 shadow-black w-8 px-auto'><PhChatDots/></button>
+              <span className='text-blue-700 -ml-3'>All</span><span className='text-blue-700 -ml-8'>3</span>
+            </div>
+            <MenuItem icon={<BxsConversation/>} style={{ padding:0}}  component={<Link to="/people" className='text-black'/>}>
+              Block
+            </MenuItem>
+
+            <MenuItem icon={<BxsConversation/>} style={{ padding:0}}  component={<Link to="/people" className='text-black'/>}>
+              Trash
+            </MenuItem>
 
           <MenuItem icon={<HelpIcon/>} style={{ padding:0}}  onClick={logout} className='text-black'> 
-            LogOut
+            Log out
           </MenuItem>
-          <MenuItem className='text-black'> Examples</MenuItem>
+          <MenuItem className='text-black text-[16px] '> Examples</MenuItem>
         </Menu>
       </Sidebar>
       </div>
-      <main style={{ padding: 10 }} className=' absolute l-[10px] z-10'>
-        <div>
-          {
-          collapsed?<svg onClick={() => setCollapsed(!collapsed)} className='hover:cursor-pointer' xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
-            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-              <path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm11-2v16"/><path d="m9 10l2 2l-2 2"/>
-            </g>
-          </svg>:<svg onClick={() => setCollapsed(!collapsed)} className='hover:cursor-pointer'  xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
-            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-              <path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm5-2v16"/><path d="m15 10l-2 2l2 2"/>
-            </g>
-          </svg>
-          }
-        </div>
-      </main>
+      
     </>
   );
 }

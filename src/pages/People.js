@@ -6,9 +6,17 @@ import { useState, useEffect } from "react";
 import IncomingMessage from "../components/IncomingMessage";
 import OutgoingMessage from "../components/OutgoingMessage";
 import ChatsScreen from "../components/ChatsScreen";
+import { useSelector } from "react-redux";
+
+import pic from '../pic.jpeg'
+import pic1 from '../pic1.jpeg'
+import Navbar from "../components/Navbar";
+// import pic1 from '../erik.jpg'
 
 
 function People(){
+
+  const {user} = useSelector(state=>state.user)
     const [people, setPeople] = useState([])
     const [userId, setUserId] = useState()
     useEffect(()=>{
@@ -17,48 +25,58 @@ function People(){
                 setPeople(data)
                 // console.log(data)
             })
-            // console.log(people)
-        // }
+            const subscription = DataStore.observe(User).subscribe(msg => {
+              console.log(msg.model, msg.opType, msg.element);
+              DataStore.query(User).then(data=>{
+                setPeople(data)
+              })
+            });
+            subscription.unsubscribe()
     },[])
-    // const fetchPeople = async()=>{
-    //     await DataStore.query(User).then(data=>{
-    //         setPeople(data)
-    //         data.map(d=>{
-    //             // console.log(">>>>>", d)
-    //         })
-    //         console.log(data)
 
-
-    //         console.log(">>>>>")
-    //     })
-    // }
-    // people.map(p=>{
-
-    //     <Person name="test"/>
-    //     console.log(p.email)
-    // })
+    const userlog = JSON.parse(localStorage.getItem('user'));
+    console.log(userlog.attributes)
     function openMessage(id){
         setUserId(id)
         console.log("open message", id)
     }
     return (
         <>
-        <div className='flex h-scren text-kk bg-gray-100'>
-          <ChatSidebar/>
-          <div className="h-full w-full mr-2 ">
-                <div className="sm:grid sm:grid-cols-3 md:grid-cols-4 min-h-screen gap-3 bg-black h-full my-2 rounded-xl">
-                    <div className=" w-full rounded-s-xl border-e-2">
+        <div>
+          <Navbar/>
+        </div>
+        <div className='flex h-screen overflow-y-hidden font-poppins bg-slate-200'>
+          <div className="w-1/4">
+            <ChatSidebar/>
+          </div>
+          <div className=" w-full h-5/6 my-2">
+                <div className="sm:grid sm:grid-cols-3 md:grid-cols-4 h-full my-2 h- gap-3 bg-white rounded-s-xl">
+                    <div className=" rounded-s-xl border-e-2 ml-2 mt-2">
+                      <div className="w-11/12 flex rounded-lg border bg-slate-100 p-[2px] m-auto">
+                        <div className="h-8 w-8 flex bg-white rounded-lg"><svg className="my-auto h-5 w-5" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512"><path d="M443.5 420.2L336.7 312.4c20.9-26.2 33.5-59.4 33.5-95.5 0-84.5-68.5-153-153.1-153S64 132.5 64 217s68.5 153 153.1 153c36.6 0 70.1-12.8 96.5-34.2l106.1 107.1c3.2 3.4 7.6 5.1 11.9 5.1 4.1 0 8.2-1.5 11.3-4.5 6.6-6.3 6.8-16.7.6-23.3zm-226.4-83.1c-32.1 0-62.3-12.5-85-35.2-22.7-22.7-35.2-52.9-35.2-84.9 0-32.1 12.5-62.3 35.2-84.9 22.7-22.7 52.9-35.2 85-35.2s62.3 12.5 85 35.2c22.7 22.7 35.2 52.9 35.2 84.9 0 32.1-12.5 62.3-35.2 84.9-22.7 22.7-52.9 35.2-85 35.2z" fill="currentColor"></path></svg>
+                        </div>
+                        <input type="text" className="w-5/6 focus:border-none px-1 outline-none active:border-none  h-8 mx-auto font-poppins bg-transparent text-[14px]" placeholder="Search..."/>
+                      </div>
                         {
-                            people.map(person=><div key={person.cognitoId} onClick={()=>openMessage(person.cognitoId)}><Person key={person.id} receiverId={person.cognitoId} name={person.username} email={person.email}/></div>
+                            people.map(person=>{
+                              if(person.cognitoId == userlog.attributes.sub){
+                                console.log(userlog.attributes)
+                                return <></>
+                              }
+                              else{
+                              return <div key={person.cognitoId} onClick={()=>openMessage(person.cognitoId)} className="cursor-pointer"><Person key={person.id} receiverId={person.cognitoId} name={person.username} email={person.email}/></div>
+                              }
+                            }
                         )}
                     </div>
 
-                    <div className="w-full p-5 sm:col-span-2 md:col-span-3">
-                        {userId?
+                    <div className="w- bg-gray-100  rounded-xl m-3   overflow-scroll sm:col-span-2 md:col-span-3">
+                        {
+                        userId?
                             <ChatsScreen senderId={userId}/>:
                             <div className="flex justify-center items-center w-full h-full">
                                 <div className="bg-blasck my-5">
-                                    <h5 className="text-lg font-medium -mt-36 pb-20 text-gray-200">Welcome to the ChatBoard</h5>
+                                    <h5 className="text-lg font-medium -mt-36 pb-20 text-slate-700">Welcome to the ChatBoard</h5>
                                 <svg
       xmlns="http://www.w3.org/2000/svg"
       width="15em"
@@ -106,7 +124,7 @@ function People(){
         d="M196.022 415.97a5.162 5.162 0 01-4.74-6.27l-20.917-14.98 2.72-6.805 24.714 17.974a5.155 5.155 0 01-1.777 10.082z"
       ></path>
       <path
-        fill="#3f3d56"
+        fill="blue"
         d="M139.829 332.214l-12.57 4.6a4.479 4.479 0 00-2.666 5.745q.074.202.167.396l17.137 35.75 41.291 29.76 6.329-10.084-31.278-28.482z"
       ></path>
       <path
@@ -122,7 +140,7 @@ function People(){
         d="M86.29 407.69l-.227 1.894v.008l-.124 1.097-.658.088a.635.635 0 01-.08.007z"
       ></path>
       <path
-        fill="#3f3d56"
+        fill="blue"
         d="M138.377 371.36l-2.473 14.383s6.006 13.534 1.873 16.906a4.228 4.228 0 00-1.375 3.65c-.586-.05-1.164-.102-1.742-.153-14.323-1.331-28.355-4.638-42.7-5.75-1.017-.08-2.027-.153-3.044-.205l4.42-12.568-2.986-11.17-3.094-11.588-.666-19.08a10.677 10.677 0 01.007-1.082c0-.19.008-.373.022-.563a16.166 16.166 0 016.848-12.159.026.026 0 00.014-.007 16.2 16.2 0 012.122-1.258 15.715 15.715 0 012.465-.973l.849-.256 4.594-7.433 5.326-.556 1.975-.205 12.868-1.338 2.772 3.599.505.658 1.953 2.531 6.087 3.241a14.919 14.919 0 013.607 2.678 15.141 15.141 0 014.367 9.268 14.919 14.919 0 01.044 2.43z"
       ></path>
       <path
@@ -144,12 +162,12 @@ function People(){
         d="M81.55 436.63a4.217 4.217 0 01-.505.278 5.151 5.151 0 11-4.554-9.242q.132-.065.267-.122l-.015-7.528-.014-8.859-.015-9.342 7.11-1.755-.08 13.533-.029 5.984-.066 11.04a5.139 5.139 0 01-2.1 6.013z"
       ></path>
       <path
-        fill="#3f3d56"
+        fill="blue"
         d="M109.656 340.548l-.739 1.382-18.567 34.522-.556 1.032-2.626 22.627-.878 7.579-.227 1.894v.008l-.124 1.097-1.024 8.815-1.2.073-2.019.132-4.953.307-3.709.234.008-5.933.066-44.96 13.49-24.654.329-.607 5.208-9.518a4.487 4.487 0 016.092-1.778q.185.101.36.22z"
       ></path>
       <circle cx="7" cy="466.163" r="7" fill="#f2f2f2"></circle>
       <path
-        fill="#f59e07"
+        fill="black"
         d="M486.928 212.451s-2.538 26.87-3.943 46.761v.015q-.165 2.403-.307 4.645l-.746.066c-.512.051-1.017.11-1.53.16-8.178.871-16.276 2.313-24.404 3.564l-2.348.35a152.19 152.19 0 01-24.522 1.99h-.154c.066-1.024.169-2.362.286-3.899.687-8.698 2.077-23.775 2.077-23.775l1.295-8.728 4.236-28.589.03-.22.036-.248.205-.051 8.895-2.312 4.785-1.236 2.78-3.833 3.701-5.107 15.392 1.895 1.127 4.2 2.085 7.74.065.248 8.077 4.69z"
       ></path>
       <circle cx="464.957" cy="174.039" r="16.312" fill="#ffb6b6"></circle>
@@ -158,11 +176,11 @@ function People(){
         d="M447.865 164.167c1.432 1.157 1.104 6.786 2.7 5.869s1.928-2.56 3.766-2.578a6.017 6.017 0 013.963 1.793c.195.177.381.363.562.546.165-.058.329-.11.5-.154a5.183 5.183 0 013.802.535 5.085 5.085 0 00-2.896 1.168c.351.393.707.788 1.081 1.154 3.124 3.061 9.53-.199 13.837-.935-3.587 3.917-2.88 6.104-1.988 11.339l.004.286c.183-1.208 4.05-1.147 3.412.455a20.593 20.593 0 01-2.98 4.38c5.269-3.65 9.522-8.68 10.462-14.758a8.934 8.934 0 00.205-3.827 2.935 2.935 0 00-2.803-2.235 10.815 10.815 0 00-13.301-13.643 41.333 41.333 0 00-5.003 2.16 8.994 8.994 0 01-5.3.898c-1.131-.234-2.278-.82-3.387-.488-1.285.385-1.838 1.743-2.353 3.053a5.177 5.177 0 012.412 1.82 5.066 5.066 0 00-3.116-.127.316.316 0 00-.056.015c-1.163 2.085-1.23 2.596-3.523 3.274z"
       ></path>
       <path
-        fill="#3f3d56"
+        fill="blue"
         d="M455.998 267.662l-2.348.35a152.19 152.19 0 01-24.522 1.99c.059-1.294.095-2.596.132-3.899.05-1.821.087-3.65.124-5.479l.505-24.858.022-1.193c.168-8.376.395-17.03 3.87-24.66a25.153 25.153 0 012.948-4.894c.058-.08.11-.154.168-.227a10.9 10.9 0 01.241-.3 24.298 24.298 0 013.102-3.212 17.87 17.87 0 0113.007-4.703l.351.534.469.724c-.308 2.29-.622 4.587-.915 6.884-1.265 9.956-2.173 19.971-1.156 29.935.864 8.376 3.08 16.577 3.782 24.96.03.278.052.564.074.842a69.716 69.716 0 01.146 7.206z"
       ></path>
       <path
-        fill="#3f3d56"
+        fill="blue"
         d="M481.93 263.933c.36-1.56.7-3.13 1.06-4.71v-.01q2.085-9.36 4.18-18.72c1.83-8.18 3.66-16.64 2.09-24.87a24.778 24.778 0 00-.61-2.51c-.08-.27-.17-.54-.26-.81a24.933 24.933 0 00-2.55-5.4c-2.78-4.44-6.94-7.89-12.02-8.8a1.666 1.666 0 00-.29-.06l-1.11 1.03c-.23 2.13-.45 4.28-.69 6.42-1.14 10.13-2.63 20.25-6.04 29.83-2.92 8.2-7.2 15.87-9.87 24.15-.01.05-.03.1-.04.14a70.78 70.78 0 00-2.13 8.4c.78-.12 1.57-.23 2.35-.35 8.13-1.25 16.22-2.69 24.4-3.56z"
       ></path>
       <path
@@ -170,7 +188,7 @@ function People(){
         d="M497.82 170.607l-.468-4.492-.11-1.039-.169-1.668-3.613-34.668a4.72 4.72 0 00-2.07-5.384 4.527 4.527 0 00-6.204 1.565c-.022.037-.037.073-.059.11a4.746 4.746 0 001.639 6.408 4.807 4.807 0 00.68.322l-.029.973-.088 3.05-.066 2.305-.139 4.587-.05 1.778-.17 5.764-.16 5.56-.198 6.738-.153 5.18 1.865.475z"
       ></path>
       <path
-        fill="#3f3d56"
+        fill="blue"
         d="M501.434 177.988a8.153 8.153 0 00-.432-1.763c-.944-1.639-1.522.651-1.002-3.738.417-3.563-2.085-3.117-1.185-3.877 1.485-1.259-.564-1.815-1.463-2.495-.403-.3-.571-.622-.11-1.039a3.104 3.104 0 01.717-.468c.98-.512.417-.9-.885-1.2a61.79 61.79 0 00-8.86-.826c-.716-.037-1.302-.052-1.667-.066-.271-.008-.425-.008-.425-.008a2.933 2.933 0 00-.9 1.837 10.19 10.19 0 00.337 4.44 15.701 15.701 0 001.192 2.882 2.072 2.072 0 01.249 1.127v.007a1.614 1.614 0 01-.841 1.083c-.988.658-.44 2.041.329 3.343a14.788 14.788 0 011.653 2.81c0 .9-6.086 20.022-6.086 20.022l2.238 28.874a8.031 8.031 0 005.838 1.617 8.625 8.625 0 004.601-2.34 20.367 20.367 0 004.25-6.022c5.912-11.873 3.71-37.192 2.452-44.2z"
       ></path>
       <path
@@ -178,10 +196,10 @@ function People(){
         d="M390.439 130.37a4.74 4.74 0 012.239 6.221 4.55 4.55 0 01-.377.65l21.049 29.14-7.826 8.827-19.898-37.087a4.727 4.727 0 01-1.312-5.62 4.524 4.524 0 016.013-2.185l.112.054z"
       ></path>
       <path
-        fill="#3f3d56"
+        fill="blue"
         d="M449.442 215.809s-2.813 10.064-15.945 2.67-27.335-35.007-27.477-36.899 1.622-.32-1.268-3.657c-2.351-2.715-.03-3.751-1.2-3.877-3.086-.331 2.272-4.243-1.538-3.794s8.614-8.383 8.614-8.383 2.265.054 3.993 4.881c.97 2.711.054 4.566 2.367 4.555s1.323 5.482 1.812 6.208 16.277 13.146 16.277 13.146z"
       ></path>
-      <circle cx="431.971" cy="76.082" r="76.082" fill="#f59e07"></circle>
+      <circle cx="431.971" cy="76.082" r="76.082" fill="blue"></circle>
       <path
         fill="#fff"
         d="M393.312 59.15a20.918 20.918 0 011.8 4.758c1.032 4.347.307 8.292-2.065 10.142a4.598 4.598 0 01-.765.502c-2.969 1.552-7.064-.086-10.347-3.753a20.918 20.918 0 01-2.88-4.192 20.45 20.45 0 01-1.786-4.709c-1.157-4.8-.17-9.13 2.806-10.687 3.944-2.063 9.868 1.497 13.237 7.94z"
@@ -211,16 +229,24 @@ function People(){
                                 </div>
                             </div>
                         }
-                        {/* sdjflkdjgl */}
-                        {/* <IncomingMessage message="Incoming message"/>
-                        <OutgoingMessage message="Incoming message"/>
-                        {people.map(person=><Person receiverId={person.id} name={person.username} email={person.email}/>)} */}
                     </div>
-                    {/* <button onClick={fetchPeople}>Click</button> */}
-                    {/* sdjflkdjgl
-                    {people.map(person=><Person receiverId={person.id} name={person.username} email={person.email}/>)} */}
                 </div>
             </div>
+
+            <div className="w-1/4 h-5/6 bg-white my-4 mr-2 rounded-e-lg py-2">
+              <div className="border-l-2 h-full px-2 ">
+                        <div className="flex">
+                          <span className=" flex bg-gray-200 rounded-md my-auto h-5 w-5 mr-3 text-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" className='hover:cursor-pointer my-auto' width="1.2em" height="1.2em" viewBox="0 0 24 24"><path fill="currentColor" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6l6 6l1.41-1.41z"></path></svg>
+                          </span>
+                          <span className="text-lg font-bold">General Info</span>
+                        </div>
+
+                        <div className="h- w-full bg-green-100 rounded-lg">
+                          <Person/>
+                        </div>
+              </div>
+          </div>
         </div>
         </>
     )

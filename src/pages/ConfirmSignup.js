@@ -15,10 +15,11 @@ function ConfirmSignup(){
     const location = useLocation()
     console.log(location.state.username)
 
-    const {isError, isSuccess, user} = useSelector(state => state.user)
+    const {isError, isSuccess, isConfirmed, user} = useSelector(state => state.user)
+    console.log(user, isConfirmed, isSuccess)
 
     useEffect(()=>{
-        if(isSuccess && !user){
+        if(isSuccess){
             navigate("/")
         }
         if(isError){

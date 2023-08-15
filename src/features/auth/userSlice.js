@@ -138,7 +138,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isConfirmed = true
-        state.user = action.payload;
+        state.user = JSON.stringify(action.payload);
         console.log(action.payload)
       })
       .addCase(signin.rejected, (state, action)=>{
