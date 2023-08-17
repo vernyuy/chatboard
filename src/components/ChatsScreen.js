@@ -30,10 +30,6 @@ function ChatsScreen(props){
         const chatP = await DataStore.query(User, (p)=> p.cognitoId.eq(props.senderId))
         console.log(logUser)
         await DataStore.query(Message,(msgs)=>msgs.
-        // and(
-        //         msgs => [msgs.receiver.eq(chatP[0].cognitoId), msgs.userMessageId.eq(logUser[0].id)])
-        // and(
-        //     msgs => [msgs.receiver.eq(logUser[0].cognitoId), msgs.userMessageId.eq(chatP[0].id)])
         or(m=>[
             m.and(
             msgs => [msgs.receiver.eq(logUser[0].cognitoId), msgs.userMessageId.eq(chatP[0].id)]
@@ -41,29 +37,16 @@ function ChatsScreen(props){
         m.and(
             msgs => [msgs.receiver.eq(chatP[0].cognitoId), msgs.userMessageId.eq(logUser[0].id)]
         )] ),
-        Predicates.ALL,{
-            sort: (s) => s.createdAt(SortDirection.ASCENDING)
-        }
-        // and(
-        //     msgs => [msgs.receiver.eq(userId), msgs.userMessageId.eq(logUser[0].id)]
-        // ), 
-        ).then(data=>{
+        {
+            sort: s => s.createdAt(SortDirection.ASCENDING)
+          }
+        )
+        .then(data=>{
             setMessages(data)
             console.log("kkkkk", data)
         })
 
         console.log(messages)
-            
-            // Predicates.ALL, {
-            
-            // sort: (s) => s.createdAt(SortDirection.ASCENDING)
-        // }).subscribe(snapshot=>{
-        //     const {items, isSynced} = snapshot
-        //     console.log(`[Snapshot] item count: ${items}, isSynced: ${isSynced}`);
-        //     // if(isSynced){
-        //         setMessages(items)
-        //     // }
-        // })
     }
     
     return(

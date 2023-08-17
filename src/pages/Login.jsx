@@ -3,7 +3,10 @@ import { Auth } from "aws-amplify";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 import { login, signin } from "../features/auth/userSlice";
+import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
+
 function Login(){
+    const localUser = localStorage.getItem('user')
     // const login = useSelector((state) => state.counter.value)
     const dispatch = useDispatch()
     const {user, message, isError, isLoading, isSuccess} = useSelector((state)=>state.user)
@@ -12,7 +15,7 @@ function Login(){
     const navigate = useNavigate()
 
     useEffect(()=>{
-        if(isSuccess){
+        if(isSuccess && localUser){
             navigate('/people')
         }
         if(message === "User is not confirmed."){
@@ -30,9 +33,9 @@ function Login(){
         }))
       }
 
-      const loginGoogle = (e) => {
+      const loginGoogle = async (e) => {
         console.log("Google login")
-        const test = Auth.federatedSignIn()
+        const test = await Auth.federatedSignIn({provider: 'Google' })
         console.log(test)
       }
 
@@ -123,6 +126,8 @@ function Login(){
                     </svg>
                         Google
                     </button>
+                    {/* <button onClick={() => Auth.federatedSignIn({provider: CognitoHostedUIIdentityProvider.Google })}>Open Google</button> */}
+      
                 </div>
 
                 <div className="mt-5 col-span- text-center">

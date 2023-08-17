@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react"
 import eru from '../assets/eru.jpg'
 import { ClarityUserLine } from "./icons/ClarityUserLine";
-import { DataStore } from "aws-amplify";
+import { DataStore, Storage } from "aws-amplify";
 import { User } from "../models";
 import pic from '../pic.jpeg'
 function IncomingMessage(props){
     const [sender, setSender] = useState([])
+    const [senderImage, setSenderImage] = useState()
     console.log(props.sender)
 
     useEffect(()=>{
@@ -13,8 +14,11 @@ function IncomingMessage(props){
     },[])
     async function getSender (){
         const test = await DataStore.query(User, (user)=>user.cognitoId.eq(props.sender) )
-            // console.log(test)
+            console.log("userTest",test[0].profileImageUrl)
             setSender(test)
+            const res = await Storage.get(test[0].profileImageUrl)
+            console.log('userTest', res)
+        setSenderImage(res)
         // })
     }
     // console.log(sender)
@@ -22,7 +26,7 @@ function IncomingMessage(props){
         <>
             <div className=" w-1/2 gap-6 mt-4">
                 <div className="rounded-full flex mb-2">
-                    {sender.map(s=> <ClarityUserLine name={pic}/> )} 
+                    {sender.map(s=> <ClarityUserLine name={senderImage}/> )} 
                     <p className="text-[12px] ml-2 mt-1">{props.time.split('T')[1].split('.')[0].split(':')[0]}:{props.time.split('T')[1].split('.')[0].split(':')[1]}</p>
                 
                 </div>
