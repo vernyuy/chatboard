@@ -2,16 +2,16 @@ import { useEffect, useState, useRef, useId } from "react"
 import IncomingMessage from "./IncomingMessage"
 import MessageFormField from "./MessageFormField"
 import OutgoingMessage from "./OutgoingMessage"
-import { Message, User } from "../models"
+import { ChatRoom, Message, User } from "../models"
 import { DataStore, Predicates, SortDirection } from "aws-amplify"
 
-function ChatsScreen(props){
+function GroupChatScreen(props){
     const [messages, setMessages] = useState([])
     const user = localStorage.getItem('user')
-    const userId = JSON.parse(user).attributes.sub
+    const [userId, setUserId] = useState([])
     // console.log("mesage>>>>>>>>",JSON.parse(user).attributes.sub)
     const ref = useRef();
-    console.log("kkkkreceivloged",userId)
+    // console.log("kkkkreceivloged",userId)
     console.log("kkkkksenderSidebar",props.senderId)
     useEffect(()=>{
         fetchMessages()
@@ -23,23 +23,15 @@ function ChatsScreen(props){
         });
       } 
         return () => subscription.unsubscribe()
-    },[messages.length, props.senderId])
+    },[messages.length, props.senderId, userId])
 
     async function fetchMessages(){
-        const logUser = await DataStore.query(User, (p)=> p.cognitoId.eq(userId))
-        const chatP = await DataStore.query(User, (p)=> p.cognitoId.eq(props.senderId))
-        console.log(logUser)
-        await DataStore.query(Message,(msgs)=>msgs.
-        or(m=>[
-            m.and(
-            msgs => [msgs.receiver.eq(logUser[0].cognitoId), msgs.userMessageId.eq(chatP[0].id)]
-        ), 
-        m.and(
-            msgs => [msgs.receiver.eq(chatP[0].cognitoId), msgs.userMessageId.eq(logUser[0].id)]
-        )] ),
-        {
-            sort: s => s.createdAt(SortDirection.ASCENDING)
-          }
+        const logUser = await DataStore.query(User, (p)=> p.cognitoId.eq(JSON.parse(user).attributes.sub))
+
+        setUserId(logUser[0].id)
+        console.log("kkkkreceivloged",logUser)
+        const chatP = await DataStore.query(ChatRoom, (p)=> p.id.eq(props.senderId))
+        await DataStore.query(Message,(msgs)=>msgs.receiver.eq(chatP[0].id)
         )
         .then(data=>{
             setMessages(data)
@@ -57,11 +49,11 @@ function ChatsScreen(props){
                         {
                             messages.map((msg=>{
                             //    return <IncomingMessage key={msg.id} sender={props.senderId} message={msg.message} time={msg.createdAt}/>
-                                if(msg.receiver == userId ){
-                                    return <IncomingMessage key={msg.id} sender={props.senderId} message={msg.message} time={msg.createdAt}/>
+                                if(msg.userMessageId == userId ){
+                                    return <OutgoingMessage key={msg.id} message={msg.message} time={msg.createdAt}/>
                                 }
                                 else{
-                                    return <OutgoingMessage key={msg.id} message={msg.message} time={msg.createdAt}/>
+                                    return <IncomingMessage key={msg.id} conv='group' sender={msg.userMessageId} message={msg.message} time={msg.createdAt} />
                                 }
                             }))
                         }
@@ -76,4 +68,4 @@ function ChatsScreen(props){
     )
 }
 
-export default ChatsScreen
+export default GroupChatScreen

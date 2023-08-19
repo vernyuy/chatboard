@@ -23,6 +23,7 @@ import People from './pages/People';
 import Groups from './pages/Groups';
 import { useEffect } from 'react';
 import { API, Auth } from "aws-amplify";
+import GroupChat from "./pages/GroupChat";
 Amplify.configure(awsExports);
 DataStore.configure(awsExports);
 Auth.configure(awsExports);
@@ -38,7 +39,7 @@ function App() {
       <Routes>
         {/* <Route path="/" element={<Layout />}> */}
           <Route index element={<Login />} />
-          <Route path="home" element={<Home />} />
+          <Route path="room-chat" element={<GroupChat />} />
           <Route path="signup" element={<Register />} />
           <Route path="confirm-signup" element={<ConfirmSignup />} />
           <Route path="people" element={<People />} />

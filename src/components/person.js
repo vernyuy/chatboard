@@ -9,6 +9,7 @@ import pic from '../pic.jpeg'
 import { Storage } from "aws-amplify";
 
 function Person(props){
+    const openMsg = props.cognitoId
     const [userImage, setUserImage] = useState()
     useEffect(()=>getUserImage,[])
     const getUserImage = async ()=>{

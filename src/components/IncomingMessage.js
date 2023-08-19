@@ -13,21 +13,27 @@ function IncomingMessage(props){
         getSender()
     },[])
     async function getSender (){
+        if(props.conv  === "group"){
+            const test = await DataStore.query(User, props.sender)
+            // console.log("userTest",test[0].profileImageUrl)
+            setSenderImage(test.username)
+        }else{
         const test = await DataStore.query(User, (user)=>user.cognitoId.eq(props.sender) )
-            console.log("userTest",test[0].profileImageUrl)
+            // console.log("userTest",test[0].profileImageUrl)
             setSender(test)
-            const res = await Storage.get(test[0].profileImageUrl)
-            console.log('userTest', res)
-        setSenderImage(res)
+            // const res = await Storage.get(test[0].profileImageUrl)
+            // console.log('userTest', res)
+        // setSenderImage(res)
         // })
-    }
+    }}
     // console.log(sender)
     return(
         <>
             <div className=" w-1/2 gap-6 mt-4">
-                <div className="rounded-full flex mb-2">
-                    {sender.map(s=> <ClarityUserLine name={senderImage}/> )} 
-                    <p className="text-[12px] ml-2 mt-1">{props.time.split('T')[1].split('.')[0].split(':')[0]}:{props.time.split('T')[1].split('.')[0].split(':')[1]}</p>
+                <div className="rounded-full flex mb-[px]">
+                    {/* {sender.map(s=> <ClarityUserLine name={senderImage}/> )}  */}
+                    <p className="text-[10px]">{senderImage}</p>
+                    {/* <p className="text-[12px] ml-2 mt-1">{props.time.split('T')[1].split('.')[0].split(':')[0]}:{props.time.split('T')[1].split('.')[0].split(':')[1]}</p> */}
                 
                 </div>
                 <div className="h-full w-fit col-span-11">

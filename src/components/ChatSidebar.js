@@ -53,7 +53,7 @@ function ChatSidebar (){
             {/* <div className='bg-blue-600 h-32'></div> */}
         <Menu className=''>
             <MenuItem icon={<GroupIcon/>} style={{ padding:0,}}  component={<Link to="/groups" />} className='text-black text-[14px]'>
-                Groups
+                Chat rooms
             </MenuItem>
             <MenuItem icon={<BxsConversation/>} style={{ padding:0}}  component={<Link to="/people" className='text-black'/>}>
               Live chat

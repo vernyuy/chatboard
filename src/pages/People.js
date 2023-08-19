@@ -18,7 +18,7 @@ function People(){
 
   const {user} = useSelector(state=>state.user)
     const [people, setPeople] = useState([])
-    const [userId, setUserId] = useState()
+    const [userId, setUserId] = useState('')
     
     useEffect(()=>{
         // async ()=>{
@@ -26,6 +26,7 @@ function People(){
                 setPeople(data)
                 // console.log(data)
             })
+            openMessage(userId)
             const subscription = DataStore.observeQuery(User).subscribe(snapshot => {
               const { items, isSynced } = snapshot;
               console.log(`[Snapshot] item count: ${items.length}, isSynced: ${isSynced}`);
@@ -37,7 +38,7 @@ function People(){
     console.log(userlog.attributes)
     function openMessage(id){
         setUserId(id)
-        console.log("open message", id)
+        console.log("people", id)
       //   return (
       //     <>
       //     <div>
@@ -270,12 +271,12 @@ function People(){
                         {
                             people.map(person=>{
                               if(person.cognitoId == userlog.attributes.sub){
-                                console.log(userlog.attributes)
+                                // console.log(person.cognitoId)
                                 return <></>
                               }
                               else{
-                                console.log("person", person)
-                              return <div key={person.cognitoId} onClick={()=>openMessage(person.cognitoId)} className="cursor-pointer"><Person key={person.id} receiverId={person.id} name={person.username} email={person.email} url={person.profileImageUrl}/></div>
+                                // console.log("person", person.cognitoId)
+                              return <div onClick={()=>{setUserId(person.cognitoId)}} className="cursor-pointer"><Person key={person.id} receiverId={person.id} name={person.username} cognito={person.cognitoId} email={person.email} url={person.profileImageUrl}/></div>
                               }
                             }
                         )}
