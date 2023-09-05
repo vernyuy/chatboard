@@ -66,11 +66,11 @@ function GroupChat(){
                         {
                             groups.map(grp=>{
                               if(grp.cognitoId == userlog.attributes.sub){
-                                console.log(userlog.attributes)
+                                // console.log(userlog.attributes)
                                 return <></>
                               }
                               else{
-                                console.log("grp", grp)
+                                // console.log("grp", grp)
                               return <div key={grp.id} onClick={()=>openMessage(grp.id)} className="cursor-pointer"><Person key={grp.id} receiverId={grp.id} name={grp.name} email={grp.email} url={grp.profileImageUrl}/></div>
                               }
                             }

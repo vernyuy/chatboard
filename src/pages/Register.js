@@ -21,15 +21,15 @@ function Register(){
     const [pwd, setPwd] = useState('')
     const navigate = useNavigate()
 
-    useEffect(()=>{
-        if(isSuccess){
-            navigate('/people')
-        }
-        if(message === "User is not confirmed."){
-            navigate('/confirm-signup', {state:{username:email}})
-        }
+    // useEffect(()=>{
+    //     if(isSuccess){
+    //         navigate('/people')
+    //     }
+    //     if(message === "User is not confirmed."){
+    //         navigate('/confirm-signup', {state:{username:email}})
+    //     }
 
-    }, [navigate, dispatch, isError, isLoading, isSuccess, message, user])
+    // }, [navigate, dispatch, isError, isLoading, isSuccess, message, user])
 
     // const {user, isLoading, isSuccess, isConfirmed, message} = useSelector((state)=>state.user)
 
@@ -70,9 +70,10 @@ function Register(){
     }
 
     useEffect(()=>{
-        if(!isConfirmed){
+        if(!isConfirmed && isSuccess){
             navigate("/confirm-signup", {state:{username: username}})
         }
+        dispatch(reset())
     }, [navigate, dispatch, isConfirmed])
 
     const handleSubmit = (e)=>{
@@ -133,7 +134,7 @@ function Register(){
                         
                         <label for="website-admin" className="block my-2 text-xs font-medium text-gray-900">profile image</label>
                         <div className="flex">
-                        <input type="file" id="website-admin" value={username} onChange={(e) => setImg(e)} className="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-blue-300 p-2.5  dark:bg-gray-50 dark:border-blue-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="username"/>
+                        <input type="file" id="website-admin" onChange={(e) => setImg(e)} className="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-blue-300 p-2.5  dark:bg-gray-50 dark:border-blue-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="username"/>
                         </div>
 
                         <label for="website-admin" className="block my-2 text-xs font-medium text-gray-900">Password</label>

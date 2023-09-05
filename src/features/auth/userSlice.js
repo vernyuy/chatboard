@@ -67,6 +67,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     reset: (state)=> {
+      console.log("hello reset")
       state.user = null
       state.isError = false
       state.isSuccess = false
@@ -168,6 +169,11 @@ export const userSlice = createSlice({
       .addCase(confirmSignup.rejected, (state, action)=>{
         state.message = action.payload;
         state.isError = true
+        state.user = null
+        state.isError = false
+        state.isConfirmed = true;
+        state.isLoading = false
+        state.isSuccess = false;
       })
       .addCase(logOut.fulfilled, (state)=>{
         state.user = null;

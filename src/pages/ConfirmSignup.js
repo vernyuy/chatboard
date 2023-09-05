@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Auth } from "aws-amplify";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { confirmSignup, resendSignupCode } from "../features/auth/userSlice";
+import { confirmSignup, resendSignupCode, reset } from "../features/auth/userSlice";
 import { useLocation } from "react-router-dom";
 import { UseSelector, useSelector } from "react-redux/es/hooks/useSelector";
 function ConfirmSignup(){
@@ -19,12 +19,13 @@ function ConfirmSignup(){
     console.log(user, isConfirmed, isSuccess)
 
     useEffect(()=>{
-        if(!isConfirmed && isSuccess){
+        if(isConfirmed && isSuccess){
             navigate("/")
         }
         if(isError){
             console.log("Failed to confirm user singup")
         }
+        dispatch(reset())
     }, [dispatch, navigate, isSuccess, isConfirmed])
     const confirmSignUp = () => {
         dispatch(confirmSignup({username: location.state.username, code}))

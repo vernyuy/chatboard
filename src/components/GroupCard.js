@@ -47,12 +47,6 @@ function GroupCard(props){
                         <img className="w-5 h-5 mb-3 rounded-full shadow-lg absolute  ml-5 mt-6" src={pic2} alt="Bonnie image"/>
                         <img className="w-5 h-5 mb-3 rounded-full shadow-lg absolute  ml-6 mt-6" src={pic1} alt="Bonnie image"/>
                         <img className="w-5 h-5 mb-3 rounded-full shadow-lg absolute  ml-7 mt-6" src={pic2} alt="Bonnie image"/>
-                        <img className="w-5 h-5 mb-3 rounded-full shadow-lg absolute  ml-8 mt-6" src={pic} alt="Bonnie image"/>
-                        <img className="w-5 h-5 mb-3 rounded-full shadow-lg absolute  ml-9 mt-6" src={pic1} alt="Bonnie image"/>
-                        <img className="w-5 h-5 mb-3 rounded-full shadow-lg absolute  ml-10 mt-6" src={pic2} alt="Bonnie image"/>
-                        <img className="w-5 h-5 mb-3 rounded-full shadow-lg absolute  ml-11 mt-6" src={pic1} alt="Bonnie image"/>
-                        <img className="w-5 h-5 mb-3 rounded-full shadow-lg absolute  ml-12 mt-6" src={pic2} alt="Bonnie image"/>
-                        <img className="w-5 h-5 mb-3 rounded-full shadow-lg absolute  ml-14 mt-6" src={pic1} alt="Bonnie image"/>
                     </div>
                     <div className="mt-6">
                          <h4 className="text-blue-800 text-[14px] font-poppins font-bold">{props.name}</h4>

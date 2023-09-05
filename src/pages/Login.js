@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Auth } from "aws-amplify";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
-import { login, signin } from "../features/auth/userSlice";
+import { login, signin, reset } from "../features/auth/userSlice";
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
 
 function Login(){
@@ -21,7 +21,7 @@ function Login(){
         if(message === "User is not confirmed."){
             navigate('/confirm-signup', {state:{username:email}})
         }
-
+        // dispatch(reset())
     }, [navigate, dispatch, isError, isLoading, isSuccess, message, user])
 
       const handleSubmit = (e) =>{
