@@ -1,0 +1,151 @@
+{
+  "stackName": "amplify-amplify-datastore-dev-161623",
+  "props": {
+    "templateFile": "root-stack-template.json",
+    "parameters": {
+      "AuthRoleName": "amplify-amplify-datastore-dev-161623-authRole",
+      "UnauthRoleName": "amplify-amplify-datastore-dev-161623-unauthRole",
+      "DeploymentBucketName": "amplify-amplify-datastore-dev-161623-deployment"
+    },
+    "preserveLogicalIds": true,
+    "loadNestedStacks": {
+      "apiamplifyDatasource": {
+        "templateFile": "api/amplifyDatasource/cloudformation-template.json",
+        "parameters": {
+          "AppSyncApiName": "amplifyDatasource",
+          "DynamoDBBillingMode": "PAY_PER_REQUEST",
+          "DynamoDBEnableServerSideEncryption": "false",
+          "S3DeploymentBucket": "amplify-amplify-datastore-dev-161623-deployment",
+          "S3DeploymentRootKey": "amplify-appsync-files/fa4d58be322176aeac40cc3a30b964c85f18fdb2",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {
+          "ChatRoom": {
+            "templateFile": "api/amplifyDatasource/amplify-appsync-files/stacks/ChatRoom.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "ConnectionStack": {
+            "templateFile": "api/amplifyDatasource/amplify-appsync-files/stacks/ConnectionStack.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "CustomResourcesjson": {
+            "templateFile": "api/amplifyDatasource/amplify-appsync-files/stacks/CustomResources.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "GroupMember": {
+            "templateFile": "api/amplifyDatasource/amplify-appsync-files/stacks/GroupMember.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "Message": {
+            "templateFile": "api/amplifyDatasource/amplify-appsync-files/stacks/Message.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          },
+          "User": {
+            "templateFile": "api/amplifyDatasource/amplify-appsync-files/stacks/User.json",
+            "preserveLogicalIds": true,
+            "loadNestedStacks": {}
+          }
+        }
+      },
+      "authamplifydatastore020797d1": {
+        "templateFile": "auth/amplifydatastore020797d1/amplifydatastore020797d1-cloudformation-template.json",
+        "parameters": {
+          "identityPoolName": "amplifydatastore020797d1_identitypool_020797d1",
+          "allowUnauthenticatedIdentities": false,
+          "resourceNameTruncated": "amplif020797d1",
+          "userPoolName": "amplifydatastore020797d1_userpool_020797d1",
+          "autoVerifiedAttributes": [
+            "email"
+          ],
+          "mfaConfiguration": "OFF",
+          "mfaTypes": [
+            "SMS Text Message"
+          ],
+          "smsAuthenticationMessage": "Your authentication code is {####}",
+          "smsVerificationMessage": "Your verification code is {####}",
+          "emailVerificationSubject": "Your verification code",
+          "emailVerificationMessage": "Your verification code is {####}",
+          "defaultPasswordPolicy": false,
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": [],
+          "requiredAttributes": [
+            "email"
+          ],
+          "aliasAttributes": [],
+          "userpoolClientGenerateSecret": false,
+          "userpoolClientRefreshTokenValidity": 30,
+          "userpoolClientWriteAttributes": [
+            "email"
+          ],
+          "userpoolClientReadAttributes": [
+            "email"
+          ],
+          "userpoolClientLambdaRole": "amplif020797d1_userpoolclient_lambda_role",
+          "userpoolClientSetAttributes": false,
+          "sharedId": "020797d1",
+          "resourceName": "amplifydatastore020797d1",
+          "authSelections": "identityPoolAndUserPool",
+          "useDefault": "defaultSocial",
+          "userPoolGroupList": [],
+          "serviceName": "Cognito",
+          "usernameCaseSensitive": false,
+          "useEnabledMfas": true,
+          "breakCircularDependency": true,
+          "dependsOn": [],
+          "hostedUI": true,
+          "hostedUIDomainName": "amplifydatastore8a86185f-8a86185f",
+          "authProvidersUserPool": [],
+          "hostedUIProviderMeta": "[]",
+          "authProviders": [],
+          "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/people/\",\"http://localhost:3000/people/\"],\"LogoutURLs\":[\"http://localhost:3000/\"]}",
+          "hostedUIProviderCreds": "[]",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "storageamplifydatastore": {
+        "templateFile": "storage/amplifydatastore/cloudformation-template.json",
+        "parameters": {
+          "bucketName": "amplify-datastore7f19ee528000495aa895d581f208bd",
+          "selectedGuestPermissions": [
+            "s3:PutObject",
+            "s3:GetObject",
+            "s3:ListBucket",
+            "s3:DeleteObject"
+          ],
+          "selectedAuthenticatedPermissions": [
+            "s3:PutObject",
+            "s3:GetObject",
+            "s3:ListBucket",
+            "s3:DeleteObject"
+          ],
+          "s3PrivatePolicy": "Private_policy_13aabf0e",
+          "s3ProtectedPolicy": "Protected_policy_13aabf0e",
+          "s3PublicPolicy": "Public_policy_13aabf0e",
+          "s3ReadPolicy": "read_policy_13aabf0e",
+          "s3UploadsPolicy": "Uploads_policy_13aabf0e",
+          "authPolicyName": "s3_amplify_13aabf0e",
+          "unauthPolicyName": "s3_amplify_13aabf0e",
+          "AuthenticatedAllowList": "ALLOW",
+          "GuestAllowList": "ALLOW",
+          "s3PermissionsAuthenticatedPrivate": "s3:PutObject,s3:GetObject,s3:DeleteObject",
+          "s3PermissionsAuthenticatedProtected": "s3:PutObject,s3:GetObject,s3:DeleteObject",
+          "s3PermissionsAuthenticatedPublic": "s3:PutObject,s3:GetObject,s3:DeleteObject",
+          "s3PermissionsAuthenticatedUploads": "s3:PutObject",
+          "s3PermissionsGuestPublic": "s3:PutObject,s3:GetObject,s3:DeleteObject",
+          "s3PermissionsGuestUploads": "s3:PutObject",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      }
+    }
+  }
+}

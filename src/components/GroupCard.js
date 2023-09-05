@@ -32,7 +32,7 @@ function GroupCard(props){
             <div className="flesx justify-between">
                 <NavLink onClick={joinGroup} to={'/room-chat'} state={{userId:"dhfsjf"}} className=" h-fit text-[12px] my-auto flex justify-end w-full mt-0">
                     join
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" color="blue">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 24 24" color="blue">
                         <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M3 21v-2a4 4 0 0 1 4-4h4c.96 0 1.84.338 2.53.901M16 3.13a4 4 0 0 1 0 7.75M16 19h6m-3-3v6"/>
                     </svg>
                 </NavLink>

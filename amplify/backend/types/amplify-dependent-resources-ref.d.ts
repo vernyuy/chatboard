@@ -20,7 +20,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "storage": {
-    "amplifydatastore": {
+    "amplifyDatastore": {
       "BucketName": "string",
       "Region": "string"
     }

@@ -44,7 +44,7 @@
     }
   },
   "storage": {
-    "amplifydatastore": {
+    "amplifyDatastore": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"

@@ -1,0 +1,509 @@
+enum UserStatus {
+  BLOCKED
+  DELETED
+  ACTIVE
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+}
+
+type Message {
+  id: ID!
+  message: String
+  messageType: MessageType
+  user: User
+  receiver: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  userMessageId: ID
+}
+
+type User {
+  id: ID!
+  username: String!
+  email: String
+  cognitoId: String!
+  profileImageUrl: String
+  room(filter: ModelChatRoomFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelChatRoomConnection
+  ChatRoom(filter: ModelGroupMemberFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelGroupMemberConnection
+  userStatus: UserStatus
+  message(filter: ModelMessageFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMessageConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type ChatRoom {
+  id: ID!
+  name: String!
+  User: User
+  members(filter: ModelGroupMemberFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelGroupMemberConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  userRoomId: ID
+}
+
+type GroupMember {
+  id: ID!
+  userId: ID!
+  chatRoomId: ID!
+  user: User!
+  chatRoom: ChatRoom!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  in: [String]
+  notIn: [String]
+}
+
+input ModelSubscriptionIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  in: [Int]
+  notIn: [Int]
+}
+
+input ModelSubscriptionFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  in: [Float]
+  notIn: [Float]
+}
+
+input ModelSubscriptionBooleanInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  in: [ID]
+  notIn: [ID]
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelMessageConnection {
+  items: [Message]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelMessageTypeInput {
+  eq: MessageType
+  ne: MessageType
+}
+
+input ModelMessageFilterInput {
+  id: ModelIDInput
+  message: ModelStringInput
+  messageType: ModelMessageTypeInput
+  receiver: ModelStringInput
+  and: [ModelMessageFilterInput]
+  or: [ModelMessageFilterInput]
+  not: ModelMessageFilterInput
+  _deleted: ModelBooleanInput
+  userMessageId: ModelIDInput
+}
+
+type Query {
+  getMessage(id: ID!): Message
+  listMessages(filter: ModelMessageFilterInput, limit: Int, nextToken: String): ModelMessageConnection
+  syncMessages(filter: ModelMessageFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelMessageConnection
+  getUser(id: ID!): User
+  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
+  syncUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelUserConnection
+  getChatRoom(id: ID!): ChatRoom
+  listChatRooms(filter: ModelChatRoomFilterInput, limit: Int, nextToken: String): ModelChatRoomConnection
+  syncChatRooms(filter: ModelChatRoomFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelChatRoomConnection
+  getGroupMember(id: ID!): GroupMember
+  listGroupMembers(filter: ModelGroupMemberFilterInput, limit: Int, nextToken: String): ModelGroupMemberConnection
+  syncGroupMembers(filter: ModelGroupMemberFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelGroupMemberConnection
+  groupMembersByUserId(userId: ID!, sortDirection: ModelSortDirection, filter: ModelGroupMemberFilterInput, limit: Int, nextToken: String): ModelGroupMemberConnection
+  groupMembersByChatRoomId(chatRoomId: ID!, sortDirection: ModelSortDirection, filter: ModelGroupMemberFilterInput, limit: Int, nextToken: String): ModelGroupMemberConnection
+}
+
+input ModelMessageConditionInput {
+  message: ModelStringInput
+  messageType: ModelMessageTypeInput
+  receiver: ModelStringInput
+  and: [ModelMessageConditionInput]
+  or: [ModelMessageConditionInput]
+  not: ModelMessageConditionInput
+  _deleted: ModelBooleanInput
+  userMessageId: ModelIDInput
+}
+
+input CreateMessageInput {
+  id: ID
+  message: String
+  messageType: MessageType
+  receiver: String
+  _version: Int
+  userMessageId: ID
+}
+
+input UpdateMessageInput {
+  id: ID!
+  message: String
+  messageType: MessageType
+  receiver: String
+  _version: Int
+  userMessageId: ID
+}
+
+input DeleteMessageInput {
+  id: ID!
+  _version: Int
+}
+
+type Mutation {
+  createMessage(input: CreateMessageInput!, condition: ModelMessageConditionInput): Message
+  updateMessage(input: UpdateMessageInput!, condition: ModelMessageConditionInput): Message
+  deleteMessage(input: DeleteMessageInput!, condition: ModelMessageConditionInput): Message
+  createUser(input: CreateUserInput!, condition: ModelUserConditionInput): User
+  updateUser(input: UpdateUserInput!, condition: ModelUserConditionInput): User
+  deleteUser(input: DeleteUserInput!, condition: ModelUserConditionInput): User
+  createChatRoom(input: CreateChatRoomInput!, condition: ModelChatRoomConditionInput): ChatRoom
+  updateChatRoom(input: UpdateChatRoomInput!, condition: ModelChatRoomConditionInput): ChatRoom
+  deleteChatRoom(input: DeleteChatRoomInput!, condition: ModelChatRoomConditionInput): ChatRoom
+  createGroupMember(input: CreateGroupMemberInput!, condition: ModelGroupMemberConditionInput): GroupMember
+  updateGroupMember(input: UpdateGroupMemberInput!, condition: ModelGroupMemberConditionInput): GroupMember
+  deleteGroupMember(input: DeleteGroupMemberInput!, condition: ModelGroupMemberConditionInput): GroupMember
+}
+
+input ModelSubscriptionMessageFilterInput {
+  id: ModelSubscriptionIDInput
+  message: ModelSubscriptionStringInput
+  messageType: ModelSubscriptionStringInput
+  receiver: ModelSubscriptionStringInput
+  and: [ModelSubscriptionMessageFilterInput]
+  or: [ModelSubscriptionMessageFilterInput]
+  _deleted: ModelBooleanInput
+}
+
+type Subscription {
+  onCreateMessage(filter: ModelSubscriptionMessageFilterInput): Message @aws_subscribe(mutations: ["createMessage"])
+  onUpdateMessage(filter: ModelSubscriptionMessageFilterInput): Message @aws_subscribe(mutations: ["updateMessage"])
+  onDeleteMessage(filter: ModelSubscriptionMessageFilterInput): Message @aws_subscribe(mutations: ["deleteMessage"])
+  onCreateUser(filter: ModelSubscriptionUserFilterInput): User @aws_subscribe(mutations: ["createUser"])
+  onUpdateUser(filter: ModelSubscriptionUserFilterInput): User @aws_subscribe(mutations: ["updateUser"])
+  onDeleteUser(filter: ModelSubscriptionUserFilterInput): User @aws_subscribe(mutations: ["deleteUser"])
+  onCreateChatRoom(filter: ModelSubscriptionChatRoomFilterInput): ChatRoom @aws_subscribe(mutations: ["createChatRoom"])
+  onUpdateChatRoom(filter: ModelSubscriptionChatRoomFilterInput): ChatRoom @aws_subscribe(mutations: ["updateChatRoom"])
+  onDeleteChatRoom(filter: ModelSubscriptionChatRoomFilterInput): ChatRoom @aws_subscribe(mutations: ["deleteChatRoom"])
+  onCreateGroupMember(filter: ModelSubscriptionGroupMemberFilterInput): GroupMember @aws_subscribe(mutations: ["createGroupMember"])
+  onUpdateGroupMember(filter: ModelSubscriptionGroupMemberFilterInput): GroupMember @aws_subscribe(mutations: ["updateGroupMember"])
+  onDeleteGroupMember(filter: ModelSubscriptionGroupMemberFilterInput): GroupMember @aws_subscribe(mutations: ["deleteGroupMember"])
+}
+
+type ModelUserConnection {
+  items: [User]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelUserStatusInput {
+  eq: UserStatus
+  ne: UserStatus
+}
+
+input ModelUserFilterInput {
+  id: ModelIDInput
+  username: ModelStringInput
+  email: ModelStringInput
+  cognitoId: ModelStringInput
+  profileImageUrl: ModelStringInput
+  userStatus: ModelUserStatusInput
+  and: [ModelUserFilterInput]
+  or: [ModelUserFilterInput]
+  not: ModelUserFilterInput
+  _deleted: ModelBooleanInput
+}
+
+input ModelUserConditionInput {
+  username: ModelStringInput
+  email: ModelStringInput
+  cognitoId: ModelStringInput
+  profileImageUrl: ModelStringInput
+  userStatus: ModelUserStatusInput
+  and: [ModelUserConditionInput]
+  or: [ModelUserConditionInput]
+  not: ModelUserConditionInput
+  _deleted: ModelBooleanInput
+}
+
+input CreateUserInput {
+  id: ID
+  username: String!
+  email: String
+  cognitoId: String!
+  profileImageUrl: String
+  userStatus: UserStatus
+  _version: Int
+}
+
+input UpdateUserInput {
+  id: ID!
+  username: String
+  email: String
+  cognitoId: String
+  profileImageUrl: String
+  userStatus: UserStatus
+  _version: Int
+}
+
+input DeleteUserInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionUserFilterInput {
+  id: ModelSubscriptionIDInput
+  username: ModelSubscriptionStringInput
+  email: ModelSubscriptionStringInput
+  cognitoId: ModelSubscriptionStringInput
+  profileImageUrl: ModelSubscriptionStringInput
+  userStatus: ModelSubscriptionStringInput
+  and: [ModelSubscriptionUserFilterInput]
+  or: [ModelSubscriptionUserFilterInput]
+  _deleted: ModelBooleanInput
+}
+
+type ModelChatRoomConnection {
+  items: [ChatRoom]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelChatRoomFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  and: [ModelChatRoomFilterInput]
+  or: [ModelChatRoomFilterInput]
+  not: ModelChatRoomFilterInput
+  _deleted: ModelBooleanInput
+  userRoomId: ModelIDInput
+}
+
+input ModelChatRoomConditionInput {
+  name: ModelStringInput
+  and: [ModelChatRoomConditionInput]
+  or: [ModelChatRoomConditionInput]
+  not: ModelChatRoomConditionInput
+  _deleted: ModelBooleanInput
+  userRoomId: ModelIDInput
+}
+
+input CreateChatRoomInput {
+  id: ID
+  name: String!
+  _version: Int
+  userRoomId: ID
+}
+
+input UpdateChatRoomInput {
+  id: ID!
+  name: String
+  _version: Int
+  userRoomId: ID
+}
+
+input DeleteChatRoomInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionChatRoomFilterInput {
+  id: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  and: [ModelSubscriptionChatRoomFilterInput]
+  or: [ModelSubscriptionChatRoomFilterInput]
+  _deleted: ModelBooleanInput
+}
+
+type ModelGroupMemberConnection {
+  items: [GroupMember]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelGroupMemberFilterInput {
+  id: ModelIDInput
+  userId: ModelIDInput
+  chatRoomId: ModelIDInput
+  and: [ModelGroupMemberFilterInput]
+  or: [ModelGroupMemberFilterInput]
+  not: ModelGroupMemberFilterInput
+  _deleted: ModelBooleanInput
+}
+
+input ModelGroupMemberConditionInput {
+  userId: ModelIDInput
+  chatRoomId: ModelIDInput
+  and: [ModelGroupMemberConditionInput]
+  or: [ModelGroupMemberConditionInput]
+  not: ModelGroupMemberConditionInput
+  _deleted: ModelBooleanInput
+}
+
+input CreateGroupMemberInput {
+  id: ID
+  userId: ID!
+  chatRoomId: ID!
+  _version: Int
+}
+
+input UpdateGroupMemberInput {
+  id: ID!
+  userId: ID
+  chatRoomId: ID
+  _version: Int
+}
+
+input DeleteGroupMemberInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionGroupMemberFilterInput {
+  id: ModelSubscriptionIDInput
+  userId: ModelSubscriptionIDInput
+  chatRoomId: ModelSubscriptionIDInput
+  and: [ModelSubscriptionGroupMemberFilterInput]
+  or: [ModelSubscriptionGroupMemberFilterInput]
+  _deleted: ModelBooleanInput
+}

@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@aws-amplify/cdk-exported-backend": "^0.0.6",
         "@aws-amplify/core": "^5.8.1",
         "@aws-amplify/datastore": "^4.7.1",
         "@aws-amplify/ui-react": "^5.0.6",

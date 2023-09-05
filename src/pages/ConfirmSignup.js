@@ -19,7 +19,7 @@ function ConfirmSignup(){
     console.log(user, isConfirmed, isSuccess)
 
     useEffect(()=>{
-        if(isConfirmed && isSuccess){
+        if(!isConfirmed && isSuccess){
             navigate("/")
         }
         if(isError){

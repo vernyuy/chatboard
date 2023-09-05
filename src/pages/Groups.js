@@ -15,6 +15,8 @@ function Groups(){
     const [groups, setGroups] = useState([])
     useEffect(()=>{
         getGroups()
+        const grps = DataStore.observe(ChatRoom).subscribe(()=> getGroups())
+        return () => grps.unsubscribe()
     }, [])
 
     const getGroups = async  ()=>{
@@ -42,7 +44,7 @@ function Groups(){
 
           <div className="rounded-xl bg-white h-5/6 ">
                     <button onClick={()=>setShowModal(true)} className="bg-blue-700 text-[12px] font-poppins text-white py-1 px-2 rounded-md hover:scale-95 transition">
-                        Open Modal
+                        create ChatRoom
                     </button>
 
                     <div className=" grid grid-cols-4 gap-y-8 w-full py-4 ">

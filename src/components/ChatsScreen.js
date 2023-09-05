@@ -7,6 +7,8 @@ import { DataStore, Predicates, SortDirection } from "aws-amplify"
 
 function ChatsScreen(props){
     const [messages, setMessages] = useState([])
+
+    const [sendName, setSenderName] = useState([])
     const user = localStorage.getItem('user')
     const userId = JSON.parse(user).attributes.sub
     // console.log("mesage>>>>>>>>",JSON.parse(user).attributes.sub)
@@ -29,6 +31,7 @@ function ChatsScreen(props){
         const logUser = await DataStore.query(User, (p)=> p.cognitoId.eq(userId))
         const chatP = await DataStore.query(User, (p)=> p.cognitoId.eq(props.senderId))
         console.log(logUser)
+        setSenderName(chatP)
         await DataStore.query(Message,(msgs)=>msgs.
         or(m=>[
             m.and(
@@ -58,7 +61,7 @@ function ChatsScreen(props){
                             messages.map((msg=>{
                             //    return <IncomingMessage key={msg.id} sender={props.senderId} message={msg.message} time={msg.createdAt}/>
                                 if(msg.receiver == userId ){
-                                    return <IncomingMessage key={msg.id} sender={props.senderId} message={msg.message} time={msg.createdAt}/>
+                                    return <IncomingMessage key={msg.id} name={sendName[0].username} sender={props.senderId} message={msg.message} time={msg.createdAt}/>
                                 }
                                 else{
                                     return <OutgoingMessage key={msg.id} message={msg.message} time={msg.createdAt}/>

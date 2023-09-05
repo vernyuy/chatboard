@@ -11,7 +11,9 @@ import { Storage } from "aws-amplify";
 function Person(props){
     const openMsg = props.cognitoId
     const [userImage, setUserImage] = useState()
-    useEffect(()=>getUserImage,[])
+    useEffect(()=>{
+        getUserImage()
+    },[])
     const getUserImage = async ()=>{
         const res =  await Storage.get(props.url)
         console.log("urll",res)

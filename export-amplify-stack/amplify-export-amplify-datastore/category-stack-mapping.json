@@ -1,0 +1,17 @@
+[
+  {
+    "category": "api",
+    "resourceName": "amplifyDatasource",
+    "service": "AppSync"
+  },
+  {
+    "category": "auth",
+    "resourceName": "amplifydatastore020797d1",
+    "service": "Cognito"
+  },
+  {
+    "category": "storage",
+    "resourceName": "amplifydatastore",
+    "service": "S3"
+  }
+]
