@@ -37,7 +37,7 @@ function IncomingMessage(props){
                 
                 </div>
                 <div className="h-full w-fit col-span-11">
-                    {props.name}
+                    {/* {props.name} */}
                     <div className=" w-fit bg-[#fff] p-2 rounded-none rounded-e-3xl rounded-bl-3xl">
                         <p>{props.message}</p>
                     </div>
